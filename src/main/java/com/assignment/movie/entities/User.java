@@ -1,0 +1,99 @@
+package com.assignment.movie.entities;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+@Entity
+@Table(name = "users")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
+    private UUID id;
+
+    @Column(name = "email", nullable = false, unique = true)
+    @Email(message = "Invalid email")
+    private String email;
+
+    @Column(name = "phone", nullable = false, unique = true)
+    @Pattern(regexp="(^$|[0-9]{10})", message = "Invalid phone number")
+    private String phoneNumber;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Movie> favoriteMovies;
+
+    @ElementCollection(targetClass = Genre.class, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "user_favorite_categories", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "favorite_category")
+    private Set<Genre> favoriteCategories;
+
+    @Enumerated(EnumType.STRING)
+    private WebsiteTheme websiteTheme;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Set<Movie> getFavoriteMovies() {
+        return favoriteMovies;
+    }
+
+    public void setFavoriteMovies(Set<Movie> favoriteMovies) {
+        this.favoriteMovies = favoriteMovies;
+    }
+
+    public Set<Genre> getFavoriteCategories() {
+        return favoriteCategories;
+    }
+
+    public void setFavoriteCategories(Set<Genre> favoriteCategories) {
+        this.favoriteCategories = favoriteCategories;
+    }
+
+    public WebsiteTheme getWebsiteTheme() {
+        return websiteTheme;
+    }
+
+    public void setWebsiteTheme(WebsiteTheme websiteTheme) {
+        this.websiteTheme = websiteTheme;
+    }
+}
