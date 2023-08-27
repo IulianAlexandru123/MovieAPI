@@ -7,6 +7,7 @@ import com.assignment.movie.entities.User;
 import com.assignment.movie.entities.WebsiteTheme;
 import com.assignment.movie.services.MovieService;
 import com.assignment.movie.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody User user) {
+    public ResponseEntity<User> addUser(@RequestBody @Valid User user) {
         user.setWebsiteTheme(WebsiteTheme.LIGHT);
         user.setFavoriteCategories(new HashSet<>());
         user.setFavoriteMovies(new HashSet<>());
@@ -78,7 +79,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody User userUpdate) {
+    public ResponseEntity<User> updateUser(@PathVariable UUID id, @RequestBody @Valid User userUpdate) {
         User updatedUser = userService.updateUser(id, userUpdate);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
